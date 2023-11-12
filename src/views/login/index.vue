@@ -56,7 +56,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-import { User , Hide } from '@element-plus/icons-vue'
+import { User , Hide } from '@element-plus/icons-vue';
+import api from '@/api/login.js';
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -69,7 +70,7 @@ const validateMobile = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入手机号"));
   } else {
-    const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+    const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/;
     const isPhone = reg.test(value);
     value = Number(value);
     if (typeof value === "number" && !isNaN(value)) {
@@ -128,9 +129,15 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  formEl.validate((valid) => {
+  formEl.validate(async (valid) => {
     if (valid) {
-      
+      const submittedData = {
+        mobile: ruleForm.mobile,
+        password: ruleForm.password,
+      };
+
+      const loginResponse = await api.login(submittedData);
+      console.log(loginResponse)
     } else {
       console.log("error submit!");
       return false;

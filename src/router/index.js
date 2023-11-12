@@ -20,8 +20,6 @@ export const constantRoutes = [
   {
     path: "/test-layout",
     component: () => import("@/views/test/index.vue"),
-    // component: () => import('@/layout/index.vue'),
-    // component: () => import('@/layout/parentView.vue'),
     meta: {
       isParentView: true,
       xxx: true,
