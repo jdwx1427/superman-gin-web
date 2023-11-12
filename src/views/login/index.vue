@@ -54,10 +54,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { ErrorCodes, reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { User , Hide } from '@element-plus/icons-vue';
 import api from '@/api/login.js';
+import router from '@/router';
+
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -137,7 +139,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
       };
 
       const loginResponse = await api.login(submittedData);
-      console.log(loginResponse)
+      const errCode = loginResponse.data.error_code
+      if(errCode != 200){
+        alert(loginResponse.data.message) 
+        return
+      }
+
+      router.push("/")
+
     } else {
       console.log("error submit!");
       return false;
